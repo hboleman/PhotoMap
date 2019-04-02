@@ -13,6 +13,7 @@ import MapKit
 class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate {
     //-------------------- Class Setup --------------------//
     
+    
     // Outlets
     @IBOutlet weak var mapView: MKMapView!
     
