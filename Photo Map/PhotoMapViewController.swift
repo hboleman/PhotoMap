@@ -120,38 +120,6 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
         return annotationView
     }
     
-    /*func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let reuseID = "myAnnotationView"
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
-        if annotationView == nil {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-            /// show the callout "bubble" when annotation view is selected
-            annotationView?.canShowCallout = true
-        }
-        
-        /// Set the "pin" image of the annotation view
-        let pinImage = UIImage(named: "pin")
-        annotationView?.image = pinImage
-        
-        /// Add an info button to the callout "bubble" of the annotation view
-        let rightCalloutButton = UIButton(type: .detailDisclosure)
-        annotationView?.rightCalloutAccessoryView = rightCalloutButton
-        
-        /// Add image to the callout "bubble" of the annotation view
-        let image = UIImage(named: "founders_den")
-        let leftCalloutImageView = UIImageView(image: image)
-        annotationView?.leftCalloutAccessoryView = leftCalloutImageView
-        
-        return annotationView
-    } */
-    
-//    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-//        let lattitude = view.annotation?.coordinate.latitude
-//        let longitude = view.annotation?.coordinate.longitude
-//        guard let appleMapsURL = URL(string: "http://maps.apple.com/?q=\(lattitude),\(longitude)") else { return }
-//        UIApplication.shared.open(appleMapsURL, options: [:], completionHandler: nil)
-//    }
-    
     //-------------------- Other --------------------//
     
     override func didReceiveMemoryWarning() {
