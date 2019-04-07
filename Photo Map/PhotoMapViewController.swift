@@ -17,6 +17,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     // Variables
     var pickedImage: UIImage!
     var locationManager : CLLocationManager!
+    var venuLocation: CLLocationCoordinate2D!
     
     // Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -80,9 +81,11 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     
     func addPin() {
         let annotation = MKPointAnnotation()
-        let locationCoordinate = CLLocationCoordinate2D(latitude: 37.779560, longitude: -122.393027)
-        annotation.coordinate = locationCoordinate
-        annotation.title = "Founders Den"
+        //let locationCoordinate = CLLocationCoordinate2D(latitude: 37.779560, longitude: -122.393027)
+        let locationCoordinate = venuLocation
+        annotation.coordinate = locationCoordinate!
+        //annotation.title = "Founders Den"
+        annotation.title = String(describing: locationCoordinate?.latitude)
         mapView.addAnnotation(annotation)
     }
     
@@ -96,7 +99,8 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         print("location picked")
-        
+        venuLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude);
+        addPin();
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -139,7 +143,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
         annotationView?.leftCalloutAccessoryView = leftCalloutImageView
         
         return annotationView
-    }*/
+    } */
     
 //    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
 //        let lattitude = view.annotation?.coordinate.latitude
