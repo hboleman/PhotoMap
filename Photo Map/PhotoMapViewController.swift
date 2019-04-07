@@ -24,7 +24,9 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         print("PMVC - In ViewDidLoad")
+        
         mapView.delegate = self
+        
         // Get Location
         locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()
@@ -99,6 +101,23 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseID = "myAnnotationView"
+        
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+        if (annotationView == nil) {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            annotationView!.canShowCallout = true
+            annotationView!.leftCalloutAccessoryView = UIImageView(frame: CGRect(x:0, y:0, width: 50, height:50))
+        }
+        
+        let imageView = annotationView?.leftCalloutAccessoryView as! UIImageView
+        // Add the image you stored from the image picker
+        imageView.image = pickedImage
+        
+        return annotationView
+    }
+    
+    /*func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseID = "myAnnotationView"
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
@@ -120,7 +139,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
         annotationView?.leftCalloutAccessoryView = leftCalloutImageView
         
         return annotationView
-    }
+    }*/
     
 //    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
 //        let lattitude = view.annotation?.coordinate.latitude
