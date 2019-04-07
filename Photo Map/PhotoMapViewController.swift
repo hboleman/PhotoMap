@@ -85,7 +85,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
         let locationCoordinate = venuLocation
         annotation.coordinate = locationCoordinate!
         //annotation.title = "Founders Den"
-        annotation.title = String(describing: locationCoordinate?.latitude)
+        annotation.title = String(describing: venuLocation.latitude)
         mapView.addAnnotation(annotation)
     }
     
