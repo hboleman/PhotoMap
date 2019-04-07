@@ -8,13 +8,15 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 
-class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate {
     //-------------------- Class Setup --------------------//
     
     // Variables
     var pickedImage: UIImage!
+    var locationManager : CLLocationManager!
     
     // Outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -22,6 +24,12 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         print("PMVC - In ViewDidLoad")
+        mapView.delegate = self
+        // Get Location
+        locationManager = CLLocationManager()
+        locationManager.requestWhenInUseAuthorization()
+        
+        
         // One degree of latitude is approximately 111 kilometers (69 miles) at all times.
         // San Francisco Lat, Long = latitude: 37.783333, longitude: -122.416667
         let mapCenter = CLLocationCoordinate2D(latitude: 37.783333, longitude: -122.416667)
@@ -55,7 +63,7 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         print("PMVC - In imagePickerController")
-        let originalImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+        //let originalImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         let editedImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
         
         // Do something with the images (based on your use case)
@@ -66,14 +74,67 @@ class PhotoMapViewController: UIViewController, LocationsViewControllerDelegate,
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        print("PMVC - In Memory warn")
+    //-------------------- Map Related --------------------//
+    
+    func addPin() {
+        let annotation = MKPointAnnotation()
+        let locationCoordinate = CLLocationCoordinate2D(latitude: 37.779560, longitude: -122.393027)
+        annotation.coordinate = locationCoordinate
+        annotation.title = "Founders Den"
+        mapView.addAnnotation(annotation)
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let annotation = view.annotation {
+            if let title = annotation.title! {
+                print("Tapped \(title) pin")
+            }
+        }
     }
     
     func locationsPickedLocation(controller: LocationsViewController, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         print("location picked")
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseID = "myAnnotationView"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            /// show the callout "bubble" when annotation view is selected
+            annotationView?.canShowCallout = true
+        }
+        
+        /// Set the "pin" image of the annotation view
+        let pinImage = UIImage(named: "pin")
+        annotationView?.image = pinImage
+        
+        /// Add an info button to the callout "bubble" of the annotation view
+        let rightCalloutButton = UIButton(type: .detailDisclosure)
+        annotationView?.rightCalloutAccessoryView = rightCalloutButton
+        
+        /// Add image to the callout "bubble" of the annotation view
+        let image = UIImage(named: "founders_den")
+        let leftCalloutImageView = UIImageView(image: image)
+        annotationView?.leftCalloutAccessoryView = leftCalloutImageView
+        
+        return annotationView
+    }
+    
+//    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+//        let lattitude = view.annotation?.coordinate.latitude
+//        let longitude = view.annotation?.coordinate.longitude
+//        guard let appleMapsURL = URL(string: "http://maps.apple.com/?q=\(lattitude),\(longitude)") else { return }
+//        UIApplication.shared.open(appleMapsURL, options: [:], completionHandler: nil)
+//    }
+    
+    //-------------------- Other --------------------//
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+        print("PMVC - In Memory warn")
     }
     
     // MARK: - Navigation
